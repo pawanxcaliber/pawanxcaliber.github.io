@@ -1,0 +1,68 @@
+name: Update Projects Page
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main  # or 'master', depending on your default branch name
+
+jobs:
+  update-projects-page:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Fetch projects from GitHub API
+        id: fetch_repos
+        run: |
+          # Use curl to fetch public repos for your user
+          REPOS_JSON=$(curl -s "https://api.github.com/users/pawanxcaliber/repos?per_page=100")
+          
+          # Check if the API call was successful
+          if [ "$(echo "$REPOS_JSON" | grep -c "name")" -eq "0" ]; then
+            echo "::error::Failed to fetch repositories from GitHub API. Check your username or API status."
+            exit 1
+          fi
+
+          # Generate the HTML list from the JSON data
+          PROJECTS_HTML=""
+          for row in $(echo "${REPOS_JSON}" | jq -r '.[] | @base64'); do
+              _jq() {
+                  echo ${row} | base64 --decode | jq -r ${1}
+              }
+              NAME=$(_jq '.name')
+              DESCRIPTION=$(_jq '.description')
+              HTML_URL=$(_jq '.html_url')
+              
+              PROJECTS_HTML+="
+              <div class='project-item'>
+                  <h3>$NAME</h3>
+                  <p>${DESCRIPTION:-No description provided}</p>
+                  <a href='$HTML_URL' class='project-link' target='_blank' rel='noopener noreferrer'>View on GitHub</a>
+              </div>
+              "
+          done
+          
+          # Pass the generated HTML to the next step
+          echo "PROJECTS_HTML<<EOF" >> $GITHUB_ENV
+          echo "$PROJECTS_HTML" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Update projects.html file
+        run: |
+          # Read the template, insert the generated HTML, and save the new file
+          cat projects-template.html | sed -e "s||${{ env.PROJECTS_HTML }}|" > projects.html
+      
+      - name: Commit and push changes
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+          git add projects.html
+          git commit -m "Auto-update projects page via GitHub Actions" || echo "No changes to commit"
+          git push
