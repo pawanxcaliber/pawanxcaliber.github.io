@@ -4,7 +4,10 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - main
+      - main  
+
+permissions:
+  contents: write  
 
 jobs:
   update-projects-page:
@@ -21,8 +24,10 @@ jobs:
       - name: Fetch projects from GitHub API
         id: fetch_repos
         run: |
-          REPOS_JSON=$(curl -s "https://api.github.com/users/pawanxcaliber/repos?per_page=100")
-          
+          # Fetch all public repos from GitHub API
+          REPOS_JSON=$(curl -s "https://api.github.com/users/pawanxcaliber/repos?per_page=100&sort=updated")
+
+          # Check if the API call worked
           if [ "$(echo "$REPOS_JSON" | grep -c "name")" -eq "0" ]; then
             echo "::error::Failed to fetch repositories from GitHub API."
             exit 1
@@ -36,7 +41,7 @@ jobs:
               NAME=$(_jq '.name')
               DESCRIPTION=$(_jq '.description')
               HTML_URL=$(_jq '.html_url')
-              
+
               PROJECTS_HTML+="
               <div class='project-item'>
                   <h3>$NAME</h3>
@@ -46,12 +51,14 @@ jobs:
               "
           done
           
+          # Store HTML in GitHub Actions env
           echo "PROJECTS_HTML<<EOF" >> $GITHUB_ENV
           echo "$PROJECTS_HTML" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
       - name: Update projects.html file
         run: |
+          # Insert PROJECTS_HTML into the template placeholder
           sed '/<!-- PROJECTS_PLACEHOLDER -->/{
             r /dev/stdin
             d
@@ -64,3 +71,5 @@ jobs:
           git add projects.html
           git commit -m "Auto-update projects page via GitHub Actions" || echo "No changes to commit"
           git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
