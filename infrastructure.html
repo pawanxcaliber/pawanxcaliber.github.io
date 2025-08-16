@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infrastructure - Pawan M Kolachippu</title>
+    <style>
+        /* General Body and Layout */
+        body {
+            background-color: #f3f4f6;
+            color: #1f2937;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 2rem;
+            box-sizing: border-box;
+        }
+
+        .card {
+            background-color: #ffffff;
+            border: 2px solid #000;
+            padding: 2rem;
+            max-width: 90%;
+            width: 800px;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            box-shadow: 8px 8px 0px #000;
+        }
+
+        /* Header Section */
+        .header-section {
+            text-align: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 1.5rem;
+        }
+        .header-section h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 0;
+        }
+        .header-section .back-button {
+            display: inline-block;
+            margin-top: 1rem;
+            text-decoration: none;
+            color: #4b5563;
+            transition: color 0.05s ease;
+        }
+        .header-section .back-button:hover {
+            color: #000;
+        }
+
+        /* Familiar Tools Section */
+        .tools-section {
+            text-align: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 1.5rem;
+        }
+        .tools-section h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 0 0.5rem;
+        }
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+        .tool-item {
+            background-color: #f9fafb;
+            border: 2px solid #000;
+            padding: 1rem;
+            text-align: center;
+            font-weight: bold;
+            transition: background-color 0.05s ease;
+        }
+        .tool-item:hover {
+            background-color: #e5e7eb;
+        }
+
+        /* Resources Section */
+        .resources-section {
+            text-align: center;
+        }
+        .resources-section h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 0 0.5rem;
+        }
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .resource-item {
+            border: 2px solid #000;
+            background-color: #f9fafb;
+            text-decoration: none;
+            color: #1f2937;
+            display: block;
+            transition: transform 0.05s ease, box-shadow 0.05s ease;
+        }
+        .resource-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 5px 5px 0px #000;
+        }
+        .resource-thumbnail {
+            width: 100%;
+            height: auto;
+            border-bottom: 2px solid #000;
+        }
+        .resource-title {
+            padding: 1rem;
+            font-weight: bold;
+        }
+
+        /* Media Queries for Mobile Responsiveness */
+        @media (max-width: 600px) {
+            body {
+                padding: 1rem;
+            }
+            .card {
+                padding: 1.5rem;
+                gap: 1.5rem;
+            }
+            .header-section h1, .tools-section h2, .resources-section h2 {
+                font-size: 2rem;
+            }
+            .tools-grid, .resources-grid {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            .tool-item {
+                width: 100%;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <header class="header-section">
+            <h1>Infrastructure (DevOps, Cloud, SecOps)</h1>
+            <a href="index.html" class="back-button">&larr; Back to Home</a>
+        </header>
+        
+        <section class="tools-section">
+            <h2>Familiar Tool Set:</h2>
+            <div class="tools-grid">
+                <div class="tool-item">Containers (Docker, K8's)</div>
+                <div class="tool-item">CI/CD (GitHub Actions, Jenkins, Azure Pipeline)</div>
+                <div class="tool-item">Cloud (Azure)</div>
+                <div class="tool-item">Scripting (Python, Bash)</div>
+                <div class="tool-item">Monitoring & Logging (Prometheus, Grafana, LGTM stack)</div>
+            </div>
+        </section>
+
+        <section class="resources-section">
+            <h2>Resources and Links that Hooks us to the Field:</h2>
+            <div class="resources-grid">
+                <a href="https://www.youtube.com/watch?v=your-video-id-1" class="resource-item" target="_blank">
+                    <img src="https://via.placeholder.com/480x360.png?text=YouTube+Video+1" alt="YouTube Video Thumbnail" class="resource-thumbnail">
+                    <div class="resource-title">Video Title 1</div>
+                </a>
+                <a href="https://www.youtube.com/watch?v=your-video-id-2" class="resource-item" target="_blank">
+                    <img src="https://via.placeholder.com/480x360.png?text=YouTube+Video+2" alt="YouTube Video Thumbnail" class="resource-thumbnail">
+                    <div class="resource-title">Video Title 2</div>
+                </a>
+                <a href="https://www.youtube.com/watch?v=your-video-id-3" class="resource-item" target="_blank">
+                    <img src="https://via.placeholder.com/480x360.png?text=YouTube+Video+3" alt="YouTube Video Thumbnail" class="resource-thumbnail">
+                    <div class="resource-title">Video Title 3</div>
+                </a>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
