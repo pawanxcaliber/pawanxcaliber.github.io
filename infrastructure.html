@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Infrastructure: A Developer's Guide</title>
+    <title>Infrastructure - Pawan M Kolachippu</title>
     <style>
         /* General Body and Layout */
         body {
@@ -53,33 +53,58 @@
             color: #000;
         }
 
-        /* Community Links Section */
-        .communities-section {
+        /* Familiar Tools Section */
+        .tools-section {
             text-align: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 1.5rem;
         }
-        .communities-section h2 {
+        .tools-section h2 {
             font-size: 1.5rem;
             font-weight: bold;
             margin: 0 0 0.5rem;
-            border-bottom: 2px solid #000;
-            padding-bottom: 0.5rem;
-            display: inline-block;
         }
-        .communities-grid {
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+        .tool-item {
+            background-color: #f9fafb;
+            border: 2px solid #000;
+            padding: 1rem;
+            text-align: center;
+            font-weight: bold;
+            transition: background-color 0.05s ease;
+        }
+        .tool-item:hover {
+            background-color: #e5e7eb;
+        }
+        
+        /* Community Forums Section */
+        .community-section {
+            text-align: center;
+        }
+        .community-section h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 0 0.5rem;
+        }
+        .community-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
-            margin-top: 1.5rem;
+            margin-top: 1rem;
         }
         .community-item {
             border: 2px solid #000;
             background-color: #f9fafb;
             text-decoration: none;
             color: #1f2937;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 1.5rem 1rem;
+            display: block;
+            padding: 1rem;
+            text-align: center;
+            font-weight: bold;
             transition: transform 0.05s ease, box-shadow 0.05s ease;
         }
         .community-item:hover {
@@ -87,17 +112,11 @@
             box-shadow: 5px 5px 0px #000;
         }
         .community-logo {
-            width: 60px;
-            height: 60px;
-            margin-bottom: 0.75rem;
-        }
-        .community-logo svg path, .community-logo svg rect {
-            fill: #000; /* Discord logo color */
-        }
-        .community-title {
-            font-size: 1.125rem;
-            font-weight: bold;
-            text-align: center;
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 0.5rem;
+            border-radius: 50%;
+            border: 1px solid #d1d5db;
         }
 
         /* Media Queries for Mobile Responsiveness */
@@ -109,8 +128,16 @@
                 padding: 1.5rem;
                 gap: 1.5rem;
             }
-            .header-section h1, .communities-section h2 {
+            .header-section h1, .tools-section h2, .community-section h2 {
                 font-size: 2rem;
+            }
+            .tools-grid, .community-grid {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            .tool-item {
+                width: 100%;
+                box-sizing: border-box;
             }
         }
     </style>
@@ -118,46 +145,39 @@
 <body>
     <div class="card">
         <header class="header-section">
-            <h1>Infrastructure: A Developer's Guide</h1>
+            <h1>Infrastructure (DevOps, Cloud, SecOps)</h1>
             <a href="index.html" class="back-button">← Back to Home</a>
         </header>
         
-        <section class="communities-section">
-            <h2>Community & Forums</h2>
-            <div class="communities-grid">
-                <a href="https://discord.gg/devops-sre-infrastructure-419745677585940482" class="community-item" target="_blank">
-                    <div class="community-logo">
-                        <svg viewBox="0 0 127.35 96.34" xmlns="http://www.w3.org/2000/svg"><path d="M120.73,7.56A105.77,105.77,0,0,0,84.72,0c-1.3,2.44-2.58,5.08-3.92,7.74,13.75,8.71,25.21,19.34,34.78,32.32A90,90,0,0,1,118.89,74c-4.43,8-9.45,15.69-14.88,22.84a10.45,10.45,0,0,1-1.37,1.86,97.77,97.77,0,0,0-13.79-11.23c-1.28-1.07-2.61-2.12-4-3.15a137.49,137.49,0,0,1-3.61,4c12.16,6.33,23.3,13.88,33.39,22.75l.13.12a10.6,10.6,0,0,1,1.13,1.44,115.17,115.17,0,0,1-23.3,17.43c-6.83,3.77-13.87,7.18-21,10.15a44.6,44.6,0,0,1-2.71,1.07A105,105,0,0,0,76.5,127.35a111.9,111.9,0,0,0,4.71-3c.48.15.95.3,1.42.43a29.1,29.1,0,0,1,26.47,15.22,46.56,46.56,0,0,0-3.64-1.37c-.77-.38-1.55-.73-2.34-1.1A43.68,43.68,0,0,0,119,103.54a55.19,55.19,0,0,0,3.32-8.31l-.22-1.38,0-.17a100.27,100.27,0,0,0,3.48-12.8,11.53,11.53,0,0,0-2.31-7.88Z" transform="translate(0 -15.5)"/></svg>
-                    </div>
-                    <div class="community-title">DevOps, SRE & Infrastructure</div>
-                </a>
-                
-                <a href="https://www.reddit.com/r/devops/" class="community-item" target="_blank">
-                    <div class="community-logo">
-                        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M19.7,9.3C19.7,9.3,19.7,9.3,19.7,9.3L15.6,8c0.1-0.2,0.2-0.4,0.3-0.6c0.4-0.6,0.6-1.3,0.6-2c0-1.1-0.4-2.1-1-2.9C15,2,14.2,1.2,13.2,0.8S11.1,0.1,10,0.1c-1.1,0-2.1,0.4-2.9,1S6.1,2.8,5.7,3.8c-0.1,0.3-0.3,0.5-0.3,0.8L1.7,5.1C1.2,5.2,0.8,5.6,0.7,6c-0.1,0.4,0,0.9,0.3,1.3l2.8,2.7c-0.1,0.2-0.2,0.5-0.2,0.7s-0.1,0.5-0.1,0.7s0,0.5,0,0.7s0.1,0.5,0.1,0.7s0.2,0.5,0.2,0.7l-2.8,2.7c-0.3,0.3-0.4,0.8-0.3,1.3c0.1,0.4,0.5,0.8,1,0.9L5.4,17c0.2,0.2,0.3,0.4,0.5,0.6c0.6,0.9,1.4,1.6,2.4,2.1S9.3,20,10.4,20s2.1-0.3,2.9-0.8c0.9-0.5,1.7-1.2,2.4-2.1c0.1-0.2,0.3-0.4,0.5-0.6l4.1-1.3c0.4-0.1,0.8-0.5,0.9-1c0.1-0.4,0-0.9-0.3-1.3L16.2,10.8c0.1-0.2,0.2-0.5,0.2-0.7s0.1-0.5,0.1-0.7s0-0.5,0-0.7s-0.1-0.5-0.1-0.7L19.7,9.3z M10.4,18.7c-0.8,0-1.5-0.3-2.1-0.8c-0.6-0.5-1-1.1-1.2-1.9l-0.3-1.2l0.2-0.1c0.4-0.2,0.7-0.5,1-0.9s0.5-0.8,0.5-1.3c0-0.6-0.2-1-0.6-1.5c-0.4-0.4-0.9-0.6-1.5-0.6s-1.1,0.2-1.5,0.6c-0.4,0.4-0.6,0.9-0.6,1.5c0,0.5,0.2,0.9,0.5,1.3s0.7,0.7,1,0.9L7.2,16.2l0.3,1.2c0.2,0.8,0.7,1.5,1.3,1.9s1.4,0.8,2.2,0.8s1.6-0.3,2.2-0.8c0.6-0.5,1-1.1,1.3-1.9l0.3-1.2l0.2,0.1c0.4,0.2,0.7,0.5,1,0.9s0.5,0.8,0.5,1.3c0,0.6-0.2,1-0.6,1.5c-0.4,0.4-0.9,0.6-1.5,0.6s-1.1-0.2-1.5-0.6c-0.4-0.4-0.6-0.9-0.6-1.5c0-0.5,0.2-0.9,0.5-1.3s0.7-0.7,1-0.9L12.9,16.2L13.2,17.4C13,18.2,12.2,18.7,10.4,18.7z M12.8,11.2c-0.4-0.4-0.6-0.9-0.6-1.5c0-0.6,0.2-1,0.6-1.5c0.4-0.4,0.9-0.6,1.5-0.6s1.1,0.2,1.5,0.6c0.4,0.4,0.6,0.9,0.6,1.5c0,0.6-0.2,1-0.6,1.5c-0.4,0.4-0.9,0.6-1.5,0.6S13.2,11.6,12.8,11.2zM7.2,11.2c-0.4-0.4-0.6-0.9-0.6-1.5c0-0.6,0.2-1,0.6-1.5s0.9-0.6,1.5-0.6s1.1,0.2,1.5,0.6c0.4,0.4,0.6,0.9,0.6,1.5c0,0.6-0.2,1-0.6,1.5c-0.4,0.4-0.9,0.6-1.5,0.6S7.6,11.6,7.2,11.2z"/></svg>
-                    </div>
-                    <div class="community-title">Reddit (r/devops)</div>
-                </a>
-                
-                <a href="https://www.reddit.com/r/sre/" class="community-item" target="_blank">
-                    <div class="community-logo">
-                        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M19.7,9.3C19.7,9.3,19.7,9.3,19.7,9.3L15.6,8c0.1-0.2,0.2-0.4,0.3-0.6c0.4-0.6,0.6-1.3,0.6-2c0-1.1-0.4-2.1-1-2.9C15,2,14.2,1.2,13.2,0.8S11.1,0.1,10,0.1c-1.1,0-2.1,0.4-2.9,1S6.1,2.8,5.7,3.8c-0.1,0.3-0.3,0.5-0.3,0.8L1.7,5.1C1.2,5.2,0.8,5.6,0.7,6c-0.1,0.4,0,0.9,0.3,1.3l2.8,2.7c-0.1,0.2-0.2,0.5-0.2,0.7s-0.1,0.5-0.1,0.7s0,0.5,0,0.7s0.1,0.5,0.1,0.7s0.2,0.5,0.2,0.7l-2.8,2.7c-0.3,0.3-0.4,0.8-0.3,1.3c0.1,0.4,0.5,0.8,1,0.9L5.4,17c0.2,0.2,0.3,0.4,0.5,0.6c0.6,0.9,1.4,1.6,2.4,2.1S9.3,20,10.4,20s2.1-0.3,2.9-0.8c0.9-0.5,1.7-1.2,2.4-2.1c0.1-0.2,0.3-0.4,0.5-0.6l4.1-1.3c0.4-0.1,0.8-0.5,0.9-1c0.1-0.4,0-0.9-0.3-1.3L16.2,10.8c0.1-0.2,0.2-0.5,0.2-0.7s0.1-0.5,0.1-0.7s0-0.5,0-0.7s-0.1-0.5-0.1-0.7L19.7,9.3z M10.4,18.7c-0.8,0-1.5-0.3-2.1-0.8c-0.6-0.5-1-1.1-1.2-1.9l-0.3-1.2l0.2-0.1c0.4-0.2,0.7-0.5,1-0.9s0.5-0.8,0.5-1.3c0-0.6-0.2-1-0.6-1.5c-0.4-0.4-0.9-0.6-1.5-0.6s-1.1,0.2-1.5,0.6c-0.4,0.4-0.6,0.9-0.6,1.5c0,0.5,0.2,0.9,0.5,1.3s0.7,0.7,1,0.9L7.2,16.2l0.3,1.2c0.2,0.8,0.7,1.5,1.3,1.9s1.4,0.8,2.2,0.8s1.6-0.3,2.2-0.8c0.6-0.5,1-1.1,1.3-1.9l0.3-1.2l0.2,0.1c0.4,0.2,0.7,0.5,1,0.9s0.5,0.8,0.5,1.3c0,0.6-0.2,1-0.6,1.5c-0.4,0.4-0.9,0.6-1.5,0.6s-1.1-0.2-1.5-0.6c-0.4-0.4-0.6-0.9-0.6-1.5c0-0.5,0.2-0.9,0.5-1.3s0.7-0.7,1-0.9L12.9,16.2L13.2,17.4C13,18.2,12.2,18.7,10.4,18.7z M12.8,11.2c-0.4-0.4-0.6-0.9-0.6-1.5c0-0.6,0.2-1,0.6-1.5c-0.4-0.4-0.9-0.6-1.5-0.6s-1.1,0.2-1.5,0.6c-0.4,0.4-0.6,0.9-0.6,1.5c0,0.6,0.2,1,0.6,1.5c-0.4,0.4-0.9,0.6-1.5,0.6S13.2,11.6,12.8,11.2zM7.2,11.2c-0.4-0.4-0.6-0.9-0.6-1.5c0-0.6,0.2-1,0.6-1.5s0.9-0.6,1.5-0.6s1.1,0.2,1.5,0.6c0.4,0.4,0.6,0.9,0.6,1.5c0,0.6-0.2,1-0.6,1.5c-0.4,0.4-0.9,0.6-1.5,0.6S7.6,11.6,7.2,11.2z"/></svg>
-                    </div>
-                    <div class="community-title">Reddit (r/sre)</div>
-                </a>
+        <section class="tools-section">
+            <h2>Familiar Tool Set:</h2>
+            <div class="tools-grid">
+                <div class="tool-item">Containers (Docker, K8's)</div>
+                <div class="tool-item">CI/CD (GitHub Actions, Jenkins, Azure Pipeline)</div>
+                <div class="tool-item">Cloud (Azure)</div>
+                <div class="tool-item">Scripting (Python, Bash)</div>
+                <div class="tool-item">Monitoring & Logging (Prometheus, Grafana, LGTM stack)</div>
+            </div>
+        </section>
 
-                <a href="https://devops.com/" class="community-item" target="_blank">
-                    <div class="community-logo">
-                        <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M41.444,14.625l-2.072-2.072C38.995,12.428,38.25,12,37.5,12h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h1.793l-5.325,5.325 c-1.558-0.966-3.414-1.529-5.385-1.529c-5.759,0-10.5,4.741-10.5,10.5c0,2.152,0.728,4.148,1.94,5.759L1.444,40.352 c-0.635,0.635-0.635,1.664,0,2.299C1.751,42.966,2.15,43.125,2.55,43.125s0.799-0.159,1.106-0.466l7.551-7.551 c1.611,1.212,3.607,1.94,5.759,1.94c5.759,0,10.5-4.741,10.5-10.5C27.5,23.149,26.966,21.293,26,19.735l6.732-6.732 c0.828,0,1.5,0.672,1.5,1.5v3c0,0.828,0.672,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C41.5,15.22,41.444,14.625,41.444,14.625z M16.944,34.125 c-3.584,0-6.5-2.916-6.5-6.5s2.916-6.5,6.5-6.5s6.5,2.916,6.5,6.5S20.528,34.125,16.944,34.125z"></path> </g></svg>
-                    </div>
-                    <div class="community-title">DevOps.com</div>
+        <section class="community-section">
+            <h2>Community Forums:</h2>
+            <div class="community-grid">
+                <a href="https://discord.gg/devops-sre-infrastructure-419745677585940482" class="community-item" target="_blank">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Discord_Monochrome_Logo.svg" alt="Discord Logo" class="community-logo">
+                    <span>DevOps, SRE & Infrastructure</span>
                 </a>
-                
-                <a href="https://discuss.hashicorp.com/" class="community-item" target="_blank">
-                    <div class="community-logo">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M9.99997 12.5C9.99997 12.2239 10.2239 12 10.5 12H13.5C13.7761 12 14 12.2239 14 12.5V14.5C14 14.7761 13.7761 15 13.5 15H10.5C10.2239 15 9.99997 14.7761 9.99997 14.5V12.5Z" fill="#000000"></path> <path d="M21.5 12.5C21.5 12.2239 21.2761 12 21 12H17C16.7239 12 16.5 12.2239 16.5 12.5V14.5C16.5 14.7761 16.7239 15 17 15H21C21.2761 15 21.5 14.7761 21.5 14.5V12.5Z" fill="#000000"></path> <path d="M5.5 12.5C5.5 12.2239 5.27614 12 5 12H3C2.72386 12 2.5 12.2239 2.5 12.5V14.5C2.5 14.7761 2.72386 15 3 15H5C5.27614 15 5.5 14.7761 5.5 14.5V12.5Z" fill="#000000"></path> <path d="M11.9999 21.5C11.9999 21.7761 11.7761 22 11.5 22H10.5C10.2239 22 9.99994 21.7761 9.99994 21.5V17.5C9.99994 17.2239 10.2239 17 10.5 17H11.5C11.7761 17 11.9999 17.2239 11.9999 17.5V21.5Z" fill="#000000"></path> <path d="M15.4999 21.5C15.4999 21.7761 15.2761 22 15 22H14C13.7239 22 13.4999 21.7761 13.4999 21.5V17.5C13.4999 17.2239 13.7239 17 14 17H15C15.2761 17 15.4999 17.2239 15.4999 17.5V21.5Z" fill="#000000"></path> <path d="M8.49994 21.5C8.49994 21.7761 8.27608 22 8 22H7C6.72386 22 6.49994 21.7761 6.49994 21.5V17.5C6.49994 17.2239 6.72386 17 7 17H8C8.27614 17 8.49994 17.2239 8.49994 17.5V21.5Z" fill="#000000"></path> <path d="M11.9999 5.5C11.9999 5.77614 11.7761 6 11.5 6H10.5C10.2239 6 9.99994 5.77614 9.99994 5.5V2.5C9.99994 2.22386 10.2239 2 10.5 2H11.5C11.7761 2 11.9999 2.22386 11.9999 2.5V5.5Z" fill="#000000"></path> <path d="M15.4999 5.5C15.4999 5.77614 15.2761 6 15 6H14C13.7239 6 13.4999 5.77614 13.4999 5.5V2.5C13.4999 2.22386 13.7239 2 14 2H15C15.2761 2 15.4999 2.22386 15.4999 2.5V5.5Z" fill="#000000"></path> <path d="M8.49994 5.5C8.49994 5.77614 8.27608 6 8 6H7C6.72386 6 6.49994 5.77614 6.49994 5.5V2.5C6.49994 2.22386 6.72386 2 7 2H8C8.27614 2 8.49994 2.22386 8.49994 2.5V5.5Z" fill="#000000"></path> <path d="M21.5 8.5C21.5 8.77614 21.2761 9 21 9H17C16.7239 9 16.5 8.77614 16.5 8.5V6.5C16.5 6.22386 16.7239 6 17 6H21C21.2761 6 21.5 6.22386 21.5 6.5V8.5Z" fill="#000000"></path> <path d="M2.5 8.5C2.5 8.77614 2.72386 9 3 9H7C7.27614 9 7.5 8.77614 7.5 8.5V6.5C7.5 6.22386 7.27614 6 7 6H3C2.72386 6 2.5 6.22386 2.5 6.5V8.5Z" fill="#000000"></path> <path d="M21.5 19.5C21.5 19.7761 21.2761 20 21 20H17C16.7239 20 16.5 19.7761 16.5 19.5V17.5C16.5 17.2239 16.7239 17 17 17H21C21.2761 17 21.5 17.2239 21.5 17.5V19.5Z" fill="#000000"></path> <path d="M2.5 19.5C2.5 19.7761 2.72386 20 3 20H7C7.27614 20 7.5 19.7761 7.5 19.5V17.5C7.5 17.2239 7.27614 17 7 17H3C2.72386 17 2.5 17.2239 2.5 17.5V19.5Z" fill="#000000"></path> <path d="M12.9999 11.5C12.9999 11.7761 12.7761 12 12.5 12H11.5C11.2239 12 10.9999 11.7761 10.9999 11.5V7.5C10.9999 7.22386 11.2239 7 11.5 7H12.5C12.7761 7 12.9999 7.22386 12.9999 7.5V11.5Z" fill="#000000"></path> </g></svg>
-                    </div>
-                    <div class="community-title">HashiCorp Community</div>
+                <a href="https://www.reddit.com/r/devops" class="community-item" target="_blank">
+                    <img src="https://www.redditstatic.com/desktop2x/img/favicon/apple-icon-57x57.png" alt="Reddit Logo" class="community-logo">
+                    <span>r/devops</span>
+                </a>
+                <a href="https://www.reddit.com/r/sre" class="community-item" target="_blank">
+                    <img src="https://www.redditstatic.com/desktop2x/img/favicon/apple-icon-57x57.png" alt="Reddit Logo" class="community-logo">
+                    <span>r/sre</span>
+                </a>
+                <a href="https://devops.com" class="community-item" target="_blank">
+                    <img src="https://devops.com/wp-content/uploads/2021/05/DO_Mark_Black_RGB.png" alt="DevOps.com Logo" class="community-logo">
+                    <span>DevOps.com</span>
                 </a>
             </div>
         </section>
