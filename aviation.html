@@ -62,34 +62,36 @@
         }
         .channels-grid, .news-list {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 1rem;
         }
-        .channel-item, .news-item {
+
+        .news-item {
             background-color: #f9fafb;
             border: 2px solid #000;
             padding: 1rem;
-            text-align: center;
-            font-weight: bold;
             text-decoration: none;
             color: #1f2937;
             display: block;
             transition: transform 0.05s ease, box-shadow 0.05s ease;
         }
-        .channel-item:hover, .news-item:hover {
+        .news-item:hover {
             transform: translateY(-3px);
             box-shadow: 4px 4px 0px #000;
         }
-        .channel-logo {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 0.5rem;
-            border-radius: 50%;
+
+        /* NEW: Thumbnail styling */
+        .news-thumb {
+            width: 100%;
+            height: 120px;
             object-fit: cover;
             border: 2px solid #000;
+            margin-bottom: 0.5rem;
+            background: #e5e7eb;
         }
+
         .news-item h3 {
-            font-size: 1.1rem;
+            font-size: 1rem;
             margin: 0 0 0.5rem;
             text-align: left;
         }
@@ -99,6 +101,7 @@
             color: #4b5563;
             text-align: left;
         }
+
         .loading-message {
             grid-column: 1 / -1;
             font-style: italic;
@@ -106,19 +109,11 @@
         }
 
         @media (max-width: 600px) {
-            body {
-                padding: 1rem;
-            }
-            .card {
-                padding: 1.5rem;
-                gap: 1.5rem;
-            }
-            .header-section h1 {
-                font-size: 2rem;
-            }
-            .channels-grid, .news-list {
-                grid-template-columns: 1fr;
-            }
+            body { padding: 1rem; }
+            .card { padding: 1.5rem; gap: 1.5rem; }
+            .header-section h1 { font-size: 2rem; }
+            .channels-grid, .news-list { grid-template-columns: 1fr; }
+            .news-thumb { height: 160px; }
         }
     </style>
 </head>
@@ -152,6 +147,9 @@
         const rssAPI = "https://api.rss2json.com/v1/api.json?rss_url=" + encodeURIComponent(aviationRSS);
         const container = document.getElementById("news-feed-container");
 
+        const fallbackThumb =
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/480px-No_image_available.svg.png";
+
         fetch(rssAPI)
             .then(response => response.json())
             .then(data => {
@@ -163,21 +161,23 @@
                 }
 
                 data.items.forEach(item => {
-                    const link = item.link;
-                    const title = item.title;
-                    const date = new Date(item.pubDate).toLocaleDateString();
-
                     const newsItem = document.createElement("a");
-                    newsItem.href = link;
+                    newsItem.href = item.link;
                     newsItem.target = "_blank";
                     newsItem.className = "news-item";
 
+                    // Thumbnail
+                    const img = document.createElement("img");
+                    img.className = "news-thumb";
+                    img.src = item.thumbnail || fallbackThumb;
+
                     const titleEl = document.createElement("h3");
-                    titleEl.textContent = title;
+                    titleEl.textContent = item.title;
 
                     const dateEl = document.createElement("p");
-                    dateEl.textContent = date;
+                    dateEl.textContent = new Date(item.pubDate).toLocaleDateString();
 
+                    newsItem.appendChild(img);
                     newsItem.appendChild(titleEl);
                     newsItem.appendChild(dateEl);
 
