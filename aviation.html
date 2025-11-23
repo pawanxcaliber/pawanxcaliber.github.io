@@ -66,7 +66,7 @@
         }
         .channels-grid, .news-list {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Adjusted for channel cards */
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1rem;
         }
         .channel-item, .news-item {
@@ -95,12 +95,14 @@
         .news-item h3 {
             font-size: 1.1rem;
             margin: 0 0 0.5rem;
+            text-align: left; /* Align text left for news headlines */
         }
         .news-item p {
             font-size: 0.8rem;
             font-weight: normal;
             margin: 0;
             color: #4b5563;
+            text-align: left; /* Align text left for news date */
         }
         .loading-message {
             grid-column: 1 / -1;
@@ -139,7 +141,7 @@
             <div class="channels-grid">
                 
                 <a href="http://www.youtube.com/@FoundAndExplained" class="channel-item" target="_blank">
-                    <img src="Found and Explained.jpg" alt="Found & Explained Logo" class="channel-logo">
+                    <img src="resources/Found and Explained.jpg" alt="Found & Explained Logo" class="channel-logo">
                     <span>Found & Explained</span>
                 </a>
                 
@@ -156,13 +158,14 @@
 
     <script>
         const rssFeedUrl = 'https://theaviationist.com/feed/';
-        // Use a public CORS proxy service to fetch the XML feed from another domain
-        const corsProxyUrl = 'https://api.allorigins.win/get?url=';
+        // ✅ FIX: Using a different public CORS proxy that returns raw XML text
+        const corsProxyUrl = 'https://corsproxy.io/?'; 
         const newsContainer = document.getElementById('news-feed-container');
 
         // Function to parse the XML string and display the news
         function displayNews(xmlText) {
             const parser = new DOMParser();
+            // Parse the raw XML text received from the proxy
             const xmlDoc = parser.parseFromString(xmlText, "text/xml");
             
             // Get all <item> elements from the RSS feed
@@ -173,6 +176,8 @@
 
             // Iterate over items and create HTML elements
             items.forEach(item => {
+                // QuerySelector is case-insensitive in HTML, but XML is case-sensitive, 
+                // but RSS standard is usually lower-case for <title> and <link>
                 const title = item.querySelector("title")?.textContent;
                 const link = item.querySelector("link")?.textContent;
                 const pubDate = item.querySelector("pubDate")?.textContent;
@@ -197,27 +202,30 @@
                 }
             });
 
-            // If no news items are found
+            // If no news items are found, but the fetch succeeded
             if (items.length === 0) {
-                newsContainer.innerHTML = `<p class="loading-message">Could not retrieve news headlines.</p>`;
+                newsContainer.innerHTML = `<p class="loading-message">Could not retrieve news headlines or feed is empty.</p>`;
             }
         }
 
-        // Fetch the RSS feed via the CORS proxy
+        // Fetch the RSS feed via the NEW CORS proxy
+        // This proxy requires the target URL to be encoded and appended as the query string
         fetch(corsProxyUrl + encodeURIComponent(rssFeedUrl))
             .then(response => {
                 if (!response.ok) {
-                    throw new Error(`Proxy error: ${response.status}`);
+                    throw new Error(`Proxy error: HTTP status ${response.status}`);
                 }
-                return response.json();
+                // The new proxy returns the raw XML text directly, so we use .text()
+                return response.text(); 
             })
-            .then(data => {
-                // The actual RSS content is inside the 'contents' property from the proxy
-                displayNews(data.contents);
+            .then(xmlText => {
+                // Pass the raw XML text to the display function
+                displayNews(xmlText);
             })
             .catch(error => {
                 console.error("Error fetching news feed:", error);
-                newsContainer.innerHTML = `<p class="loading-message" style="color: red;">Error loading news feed. (${error.message})</p>`;
+                // Display a clear error message to the user
+                newsContainer.innerHTML = `<p class="loading-message" style="color: red;">Error loading news feed. Please try reloading. (${error.message})</p>`;
             });
     </script>
     </body>
