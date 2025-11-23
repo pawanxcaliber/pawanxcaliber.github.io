@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aviation Interests - Pawan M Kolachippu</title>
+
     <style>
         body {
             background-color: #f3f4f6;
@@ -51,17 +52,59 @@
             color: #000;
         }
 
-        .channels-section, .news-section {
+        .channels-section {
             text-align: center;
             border-bottom: 2px solid #000;
             padding-bottom: 1.5rem;
         }
-        .channels-section h2, .news-section h2 {
+
+        .channels-section h2 {
             font-size: 1.5rem;
             font-weight: bold;
+            margin-bottom: 1rem;
         }
 
-        .channels-grid, .news-list {
+        /* Channel Card */
+        .channel-card {
+            display: flex;
+            align-items: center;
+            background-color: #f9fafb;
+            border: 2px solid #000;
+            padding: 1rem;
+            text-decoration: none;
+            color: #1f2937;
+            gap: 1rem;
+            transition: transform 0.05s ease, box-shadow 0.05s ease;
+        }
+
+        .channel-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 4px 4px 0px #000;
+        }
+
+        .channel-logo {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border: 2px solid #000;
+        }
+
+        .channel-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        /* NEWS SECTION */
+
+        .news-section {
+            text-align: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 1.5rem;
+        }
+
+        .news-list {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 1rem;
@@ -81,7 +124,6 @@
             box-shadow: 4px 4px 0px #000;
         }
 
-        /* Thumbnail */
         .news-thumb {
             width: 100%;
             height: 120px;
@@ -113,8 +155,9 @@
             body { padding: 1rem; }
             .card { padding: 1.5rem; gap: 1.5rem; }
             .header-section h1 { font-size: 2rem; }
-            .channels-grid, .news-list { grid-template-columns: 1fr; }
-            .news-thumb { height: 160px; }
+            .channel-card { flex-direction: column; text-align: center; }
+            .channel-logo { width: 120px; height: 120px; }
+            .channel-name { text-align: center; }
         }
     </style>
 </head>
@@ -127,12 +170,12 @@
         
         <section class="channels-section">
             <h2>Channels to Get Started:</h2>
-            <div class="channels-grid">
-                <a href="http://www.youtube.com/@FoundAndExplained" class="channel-item" target="_blank">
-                    <img src="resources/Found and Explained.jpg" alt="Found & Explained Logo" class="channel-logo">
-                    <span>Found & Explained</span>
-                </a>
-            </div>
+
+            <a href="http://www.youtube.com/@FoundAndExplained" target="_blank" class="channel-card">
+                <img src="resources/Found and Explained.jpg" class="channel-logo" alt="Found & Explained Logo">
+                <div class="channel-name">Found & Explained</div>
+            </a>
+
         </section>
 
         <section class="news-section">
@@ -148,8 +191,7 @@
         const rssAPI = "https://api.rss2json.com/v1/api.json?rss_url=" + encodeURIComponent(aviationRSS);
         const container = document.getElementById("news-feed-container");
 
-        const fallbackThumb =
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/480px-No_image_available.svg.png";
+        const fallbackThumb = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/480px-No_image_available.svg.png";
 
         fetch(rssAPI)
             .then(response => response.json())
@@ -167,7 +209,6 @@
                     newsItem.target = "_blank";
                     newsItem.className = "news-item";
 
-                    /* Extract thumbnail from description HTML */
                     let imgUrl = fallbackThumb;
                     if (item.description) {
                         const match = item.description.match(/<img[^>]+src="([^">]+)"/);
