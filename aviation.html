@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aviation Interests - Pawan M Kolachippu</title>
     <style>
-        /* General Body and Layout (Copied from infrastructure.html) */
         body {
             background-color: #f3f4f6;
             color: #1f2937;
@@ -31,7 +30,6 @@
             box-shadow: 8px 8px 0px #000;
         }
 
-        /* Header Section */
         .header-section {
             text-align: center;
             border-bottom: 2px solid #000;
@@ -53,7 +51,6 @@
             color: #000;
         }
 
-        /* Tool Grid (Reused for Channels) */
         .channels-section, .news-section {
             text-align: center;
             border-bottom: 2px solid #000;
@@ -62,7 +59,6 @@
         .channels-section h2, .news-section h2 {
             font-size: 1.5rem;
             font-weight: bold;
-            margin: 0 0 0.5rem;
         }
         .channels-grid, .news-list {
             display: grid;
@@ -95,22 +91,20 @@
         .news-item h3 {
             font-size: 1.1rem;
             margin: 0 0 0.5rem;
-            text-align: left; /* Align text left for news headlines */
+            text-align: left;
         }
         .news-item p {
             font-size: 0.8rem;
-            font-weight: normal;
             margin: 0;
             color: #4b5563;
-            text-align: left; /* Align text left for news date */
+            text-align: left;
         }
         .loading-message {
             grid-column: 1 / -1;
             font-style: italic;
             color: #4b5563;
         }
-        
-        /* Media Queries for Mobile Responsiveness */
+
         @media (max-width: 600px) {
             body {
                 padding: 1rem;
@@ -119,12 +113,11 @@
                 padding: 1.5rem;
                 gap: 1.5rem;
             }
-            .header-section h1, .channels-section h2, .news-section h2 {
+            .header-section h1 {
                 font-size: 2rem;
             }
             .channels-grid, .news-list {
                 grid-template-columns: 1fr;
-                gap: 0.75rem;
             }
         }
     </style>
@@ -139,13 +132,11 @@
         <section class="channels-section">
             <h2>Channels to Get Started:</h2>
             <div class="channels-grid">
-                
                 <a href="http://www.youtube.com/@FoundAndExplained" class="channel-item" target="_blank">
                     <img src="resources/Found and Explained.jpg" alt="Found & Explained Logo" class="channel-logo">
                     <span>Found & Explained</span>
                 </a>
-                
-                </div>
+            </div>
         </section>
 
         <section class="news-section">
@@ -157,71 +148,57 @@
     </div>
 
     <script>
-        const rssFeedUrl = 'https://theaviationist.com/feed/';
-        // ✅ FIX: Using 'thingproxy' to bypass the 403 Forbidden error experienced with other proxies.
-        const corsProxyUrl = 'https://thingproxy.freeboard.io/fetch/'; 
-        const newsContainer = document.getElementById('news-feed-container');
+        const rssFeedUrl = encodeURIComponent("https://theaviationist.com/feed/");
+        const proxyUrl = "https://api.allorigins.win/get?url="; 
+        const newsContainer = document.getElementById("news-feed-container");
 
-        // Function to parse the XML string and display the news
         function displayNews(xmlText) {
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(xmlText, "text/xml");
-            
-            // Get all <item> elements from the RSS feed
             const items = xmlDoc.querySelectorAll("item");
-            
-            // Clear the loading message
-            newsContainer.innerHTML = '';
 
-            // Iterate over items and create HTML elements
+            newsContainer.innerHTML = "";
+
             items.forEach(item => {
                 const title = item.querySelector("title")?.textContent;
                 const link = item.querySelector("link")?.textContent;
                 const pubDate = item.querySelector("pubDate")?.textContent;
 
-                if (title && link) {
-                    const newsItem = document.createElement('a');
-                    newsItem.href = link;
-                    newsItem.className = 'news-item';
-                    newsItem.target = '_blank';
-                    newsItem.rel = 'noopener noreferrer';
+                const newsItem = document.createElement("a");
+                newsItem.href = link;
+                newsItem.target = "_blank";
+                newsItem.className = "news-item";
 
-                    const titleEl = document.createElement('h3');
-                    titleEl.textContent = title;
+                const titleEl = document.createElement("h3");
+                titleEl.textContent = title;
 
-                    const dateEl = document.createElement('p');
-                    // Format the date slightly for better readability
-                    dateEl.textContent = pubDate ? new Date(pubDate).toLocaleDateString() : 'Date N/A';
+                const dateEl = document.createElement("p");
+                dateEl.textContent = pubDate ? new Date(pubDate).toLocaleDateString() : "Date N/A";
 
-                    newsItem.appendChild(titleEl);
-                    newsItem.appendChild(dateEl);
-                    newsContainer.appendChild(newsItem);
-                }
+                newsItem.appendChild(titleEl);
+                newsItem.appendChild(dateEl);
+
+                newsContainer.appendChild(newsItem);
             });
 
-            // If no news items are found, but the fetch succeeded
             if (items.length === 0) {
-                newsContainer.innerHTML = `<p class="loading-message">Could not retrieve news headlines or feed is empty.</p>`;
+                newsContainer.innerHTML = `<p class="loading-message">No news items found.</p>`;
             }
         }
 
-        // Fetch the RSS feed via the NEW CORS proxy (thingproxy)
-        fetch(corsProxyUrl + rssFeedUrl)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Proxy error: HTTP status ${response.status}`);
-                }
-                // This proxy returns the raw XML text directly
-                return response.text(); 
+        // Fetch RSS feed using AllOrigins
+        fetch(proxyUrl + rssFeedUrl)
+            .then(res => {
+                if (!res.ok) throw new Error("Proxy blocked or down");
+                return res.json();
             })
-            .then(xmlText => {
-                displayNews(xmlText);
+            .then(data => {
+                displayNews(data.contents); // AllOrigins returns JSON { contents: "xml string" }
             })
-            .catch(error => {
-                console.error("Error fetching news feed:", error);
-                // Display a clear error message to the user
-                newsContainer.innerHTML = `<p class="loading-message" style="color: red;">Error loading news feed. Please try a different proxy if this persists. (${error.message})</p>`;
+            .catch(err => {
+                console.error("RSS Error:", err);
+                newsContainer.innerHTML = `<p class="loading-message" style="color:red;">Failed to load news. (${err.message})</p>`;
             });
     </script>
-    </body>
+</body>
 </html>
