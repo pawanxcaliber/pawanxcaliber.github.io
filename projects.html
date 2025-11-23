@@ -127,75 +127,77 @@
             <a href="index.html" class="back-button">&larr; Back to Home</a>
         </header>
 
-        <section class="projects-list">
-
-    <div class='project-item'>
-        <h3>pawanxcaliber.github.io</h3>
-        <p>A Personal Portfolio website, check it out </p>
-        <a href='https://github.com/pawanxcaliber/pawanxcaliber.github.io' class='project-link' target='_blank' rel='noopener noreferrer'>View on GitHub</a>
-    </div>
-    
-    <div class='project-item'>
-        <h3>File-Server</h3>
-        <p>null</p>
-        <a href='https://github.com/pawanxcaliber/File-Server' class='project-link' target='_blank' rel='noopener noreferrer'>View on GitHub</a>
-    </div>
-    
-    <div class='project-item'>
-        <h3>conatainer_anomaly_detect</h3>
-        <p>null</p>
-        <a href='https://github.com/pawanxcaliber/conatainer_anomaly_detect' class='project-link' target='_blank' rel='noopener noreferrer'>View on GitHub</a>
-    </div>
-    
-    <div class='project-item'>
-        <h3>hive_server_windows_reserved_ports_solver</h3>
-        <p>This is an fork of official Hadoop Europe GitHub repo, where i added addition python script solve the reserved port issue in Windows Operating System </p>
-        <a href='https://github.com/pawanxcaliber/hive_server_windows_reserved_ports_solver' class='project-link' target='_blank' rel='noopener noreferrer'>View on GitHub</a>
-    </div>
-    
-    <div class='project-item'>
-        <h3>Bash-Monitor-and-Report-Automation-</h3>
-        <p>null</p>
-        <a href='https://github.com/pawanxcaliber/Bash-Monitor-and-Report-Automation-' class='project-link' target='_blank' rel='noopener noreferrer'>View on GitHub</a>
-    </div>
-    
-    <div class='project-item'>
-        <h3>github-actions-render-deployment</h3>
-        <p>null</p>
-        <a href='https://github.com/pawanxcaliber/github-actions-render-deployment' class='project-link' target='_blank' rel='noopener noreferrer'>View on GitHub</a>
-    </div>
-    
-    <div class='project-item'>
-        <h3>Linux_container-to-Cassandra_container-connection</h3>
-        <p>This yml and docker file setup help us understand establishing connection between a Linux-container and Cassandra dbms container </p>
-        <a href='https://github.com/pawanxcaliber/Linux_container-to-Cassandra_container-connection' class='project-link' target='_blank' rel='noopener noreferrer'>View on GitHub</a>
-    </div>
-    
-    <div class='project-item'>
-        <h3>Movie_Booking_System</h3>
-        <p>null</p>
-        <a href='https://github.com/pawanxcaliber/Movie_Booking_System' class='project-link' target='_blank' rel='noopener noreferrer'>View on GitHub</a>
-    </div>
-    
-    <div class='project-item'>
-        <h3>HarvestHub</h3>
-        <p>Automated Irrigation system</p>
-        <a href='https://github.com/pawanxcaliber/HarvestHub' class='project-link' target='_blank' rel='noopener noreferrer'>View on GitHub</a>
-    </div>
-    
-    <div class='project-item'>
-        <h3>Line-Follower-Robot-using-Arduino-Uno-R3</h3>
-        <p>Line Follower Robot using Arduino Uno R3</p>
-        <a href='https://github.com/pawanxcaliber/Line-Follower-Robot-using-Arduino-Uno-R3' class='project-link' target='_blank' rel='noopener noreferrer'>View on GitHub</a>
-    </div>
-    
-    <div class='project-item'>
-        <h3>pawanxcaliber</h3>
-        <p>Config files for my GitHub profile.</p>
-        <a href='https://github.com/pawanxcaliber/pawanxcaliber' class='project-link' target='_blank' rel='noopener noreferrer'>View on GitHub</a>
-    </div>
-    
+        <section class="projects-list" id="projects-container">
+            <p>Loading projects from GitHub...</p>
         </section>
     </div>
-</body>
+
+    <script>
+        // Your GitHub username
+        const username = 'pawanxcaliber';
+        // GitHub API endpoint to get all public repositories, sorted by last update date
+        const repoListUrl = `https://api.github.com/users/${username}/repos?sort=updated&direction=desc`;
+        // Get the container element where the projects will be inserted
+        const container = document.getElementById('projects-container');
+
+        /**
+         * Creates the HTML structure for a single project item.
+         * @param {object} repo - The JSON object for a single GitHub repository.
+         * @returns {HTMLElement} The complete project div element.
+         */
+        function createProjectItem(repo) {
+            const projectItem = document.createElement('div');
+            projectItem.className = 'project-item';
+
+            const title = document.createElement('h3');
+            title.textContent = repo.name;
+
+            const description = document.createElement('p');
+            // Use description if available, otherwise provide a fallback
+            description.textContent = repo.description || "No description provided.";
+            description.style.fontStyle = repo.description ? 'normal' : 'italic';
+
+            const link = document.createElement('a');
+            link.href = repo.html_url;
+            link.className = 'project-link';
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            link.textContent = 'View on GitHub';
+
+            projectItem.appendChild(title);
+            projectItem.appendChild(description);
+            projectItem.appendChild(link);
+
+            return projectItem;
+        }
+
+        // Fetch data from GitHub API
+        fetch(repoListUrl)
+            .then(response => {
+                // Check if the request was successful (status 200)
+                if (!response.ok) {
+                    throw new Error(`GitHub API error: HTTP status ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Clear the 'Loading projects...' message
+                container.innerHTML = ''; 
+
+                // Process the data and add projects to the list
+                data.forEach(repo => {
+                    // OPTIONAL: Filter out specific repos like your profile readme repo
+                    if (repo.name !== 'pawanxcaliber') {
+                        const projectElement = createProjectItem(repo);
+                        container.appendChild(projectElement);
+                    }
+                });
+            })
+            .catch(error => {
+                console.error("Error fetching repositories:", error);
+                // Display an error message to the user
+                container.innerHTML = `<p style="color: red;">Error loading projects from GitHub. Please check your internet connection or try again later. (${error.message})</p>`;
+            });
+    </script>
+    </body>
 </html>
