@@ -158,14 +158,13 @@
 
     <script>
         const rssFeedUrl = 'https://theaviationist.com/feed/';
-        // ✅ FIX: Using a different public CORS proxy that returns raw XML text
-        const corsProxyUrl = 'https://corsproxy.io/?'; 
+        // ✅ FIX: Using 'thingproxy' to bypass the 403 Forbidden error experienced with other proxies.
+        const corsProxyUrl = 'https://thingproxy.freeboard.io/fetch/'; 
         const newsContainer = document.getElementById('news-feed-container');
 
         // Function to parse the XML string and display the news
         function displayNews(xmlText) {
             const parser = new DOMParser();
-            // Parse the raw XML text received from the proxy
             const xmlDoc = parser.parseFromString(xmlText, "text/xml");
             
             // Get all <item> elements from the RSS feed
@@ -176,8 +175,6 @@
 
             // Iterate over items and create HTML elements
             items.forEach(item => {
-                // QuerySelector is case-insensitive in HTML, but XML is case-sensitive, 
-                // but RSS standard is usually lower-case for <title> and <link>
                 const title = item.querySelector("title")?.textContent;
                 const link = item.querySelector("link")?.textContent;
                 const pubDate = item.querySelector("pubDate")?.textContent;
@@ -208,24 +205,22 @@
             }
         }
 
-        // Fetch the RSS feed via the NEW CORS proxy
-        // This proxy requires the target URL to be encoded and appended as the query string
-        fetch(corsProxyUrl + encodeURIComponent(rssFeedUrl))
+        // Fetch the RSS feed via the NEW CORS proxy (thingproxy)
+        fetch(corsProxyUrl + rssFeedUrl)
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`Proxy error: HTTP status ${response.status}`);
                 }
-                // The new proxy returns the raw XML text directly, so we use .text()
+                // This proxy returns the raw XML text directly
                 return response.text(); 
             })
             .then(xmlText => {
-                // Pass the raw XML text to the display function
                 displayNews(xmlText);
             })
             .catch(error => {
                 console.error("Error fetching news feed:", error);
                 // Display a clear error message to the user
-                newsContainer.innerHTML = `<p class="loading-message" style="color: red;">Error loading news feed. Please try reloading. (${error.message})</p>`;
+                newsContainer.innerHTML = `<p class="loading-message" style="color: red;">Error loading news feed. Please try a different proxy if this persists. (${error.message})</p>`;
             });
     </script>
     </body>
