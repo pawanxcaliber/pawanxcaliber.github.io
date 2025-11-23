@@ -60,6 +60,7 @@
             font-size: 1.5rem;
             font-weight: bold;
         }
+
         .channels-grid, .news-list {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -80,7 +81,7 @@
             box-shadow: 4px 4px 0px #000;
         }
 
-        /* NEW: Thumbnail styling */
+        /* Thumbnail */
         .news-thumb {
             width: 100%;
             height: 120px;
@@ -166,10 +167,16 @@
                     newsItem.target = "_blank";
                     newsItem.className = "news-item";
 
-                    // Thumbnail
+                    /* Extract thumbnail from description HTML */
+                    let imgUrl = fallbackThumb;
+                    if (item.description) {
+                        const match = item.description.match(/<img[^>]+src="([^">]+)"/);
+                        if (match) imgUrl = match[1];
+                    }
+
                     const img = document.createElement("img");
                     img.className = "news-thumb";
-                    img.src = item.thumbnail || fallbackThumb;
+                    img.src = imgUrl;
 
                     const titleEl = document.createElement("h3");
                     titleEl.textContent = item.title;
