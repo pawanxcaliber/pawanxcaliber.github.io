@@ -164,7 +164,7 @@
 <body>
     <div class="card">
         <header class="header-section">
-            <h1>Aviation & Aerospace</h1>
+            <h1>Aviation</h1>
             <a href="index.html" class="back-button">← Back to Home</a>
         </header>
         
@@ -193,7 +193,7 @@
 
     <script>
         const aviationRSS = "https://theaviationist.com/feed/";
-        const rssAPI = "https://api.rss2json.com/v1/api.json?rss_url=" + encodeURIComponent(aviationRSS);
+        const rssAPI = "https://api.rss2json.com/v1/api.json?count=12&rss_url=" + encodeURIComponent(aviationRSS);
         const container = document.getElementById("news-feed-container");
 
         const fallbackThumb = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/480px-No_image_available.svg.png";
