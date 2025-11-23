@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aviation Interests - Pawan M Kolachippu</title>
+    <style>
+        /* General Body and Layout (Copied from infrastructure.html) */
+        body {
+            background-color: #f3f4f6;
+            color: #1f2937;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 2rem;
+            box-sizing: border-box;
+        }
+
+        .card {
+            background-color: #ffffff;
+            border: 2px solid #000;
+            padding: 2rem;
+            max-width: 90%;
+            width: 800px;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            box-shadow: 8px 8px 0px #000;
+        }
+
+        /* Header Section */
+        .header-section {
+            text-align: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 1.5rem;
+        }
+        .header-section h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 0;
+        }
+        .header-section .back-button {
+            display: inline-block;
+            margin-top: 1rem;
+            text-decoration: none;
+            color: #4b5563;
+            transition: color 0.05s ease;
+        }
+        .header-section .back-button:hover {
+            color: #000;
+        }
+
+        /* Tool Grid (Reused for Channels) */
+        .channels-section, .news-section {
+            text-align: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 1.5rem;
+        }
+        .channels-section h2, .news-section h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 0 0.5rem;
+        }
+        .channels-grid, .news-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Adjusted for channel cards */
+            gap: 1rem;
+        }
+        .channel-item, .news-item {
+            background-color: #f9fafb;
+            border: 2px solid #000;
+            padding: 1rem;
+            text-align: center;
+            font-weight: bold;
+            text-decoration: none;
+            color: #1f2937;
+            display: block;
+            transition: transform 0.05s ease, box-shadow 0.05s ease;
+        }
+        .channel-item:hover, .news-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 4px 4px 0px #000;
+        }
+        .channel-logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 0.5rem;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #000;
+        }
+        .news-item h3 {
+            font-size: 1.1rem;
+            margin: 0 0 0.5rem;
+        }
+        .news-item p {
+            font-size: 0.8rem;
+            font-weight: normal;
+            margin: 0;
+            color: #4b5563;
+        }
+        .loading-message {
+            grid-column: 1 / -1;
+            font-style: italic;
+            color: #4b5563;
+        }
+        
+        /* Media Queries for Mobile Responsiveness */
+        @media (max-width: 600px) {
+            body {
+                padding: 1rem;
+            }
+            .card {
+                padding: 1.5rem;
+                gap: 1.5rem;
+            }
+            .header-section h1, .channels-section h2, .news-section h2 {
+                font-size: 2rem;
+            }
+            .channels-grid, .news-list {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <header class="header-section">
+            <h1>Aviation & Aerospace</h1>
+            <a href="index.html" class="back-button">← Back to Home</a>
+        </header>
+        
+        <section class="channels-section">
+            <h2>Channels to Get Started:</h2>
+            <div class="channels-grid">
+                
+                <a href="http://www.youtube.com/@FoundAndExplained" class="channel-item" target="_blank">
+                    <img src="Found and Explained.jpg" alt="Found & Explained Logo" class="channel-logo">
+                    <span>Found & Explained</span>
+                </a>
+                
+                </div>
+        </section>
+
+        <section class="news-section">
+            <h2>The Aviationist News Feed:</h2>
+            <div class="news-list" id="news-feed-container">
+                <p class="loading-message">Loading news headlines...</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const rssFeedUrl = 'https://theaviationist.com/feed/';
+        // Use a public CORS proxy service to fetch the XML feed from another domain
+        const corsProxyUrl = 'https://api.allorigins.win/get?url=';
+        const newsContainer = document.getElementById('news-feed-container');
+
+        // Function to parse the XML string and display the news
+        function displayNews(xmlText) {
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+            
+            // Get all <item> elements from the RSS feed
+            const items = xmlDoc.querySelectorAll("item");
+            
+            // Clear the loading message
+            newsContainer.innerHTML = '';
+
+            // Iterate over items and create HTML elements
+            items.forEach(item => {
+                const title = item.querySelector("title")?.textContent;
+                const link = item.querySelector("link")?.textContent;
+                const pubDate = item.querySelector("pubDate")?.textContent;
+
+                if (title && link) {
+                    const newsItem = document.createElement('a');
+                    newsItem.href = link;
+                    newsItem.className = 'news-item';
+                    newsItem.target = '_blank';
+                    newsItem.rel = 'noopener noreferrer';
+
+                    const titleEl = document.createElement('h3');
+                    titleEl.textContent = title;
+
+                    const dateEl = document.createElement('p');
+                    // Format the date slightly for better readability
+                    dateEl.textContent = pubDate ? new Date(pubDate).toLocaleDateString() : 'Date N/A';
+
+                    newsItem.appendChild(titleEl);
+                    newsItem.appendChild(dateEl);
+                    newsContainer.appendChild(newsItem);
+                }
+            });
+
+            // If no news items are found
+            if (items.length === 0) {
+                newsContainer.innerHTML = `<p class="loading-message">Could not retrieve news headlines.</p>`;
+            }
+        }
+
+        // Fetch the RSS feed via the CORS proxy
+        fetch(corsProxyUrl + encodeURIComponent(rssFeedUrl))
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Proxy error: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // The actual RSS content is inside the 'contents' property from the proxy
+                displayNews(data.contents);
+            })
+            .catch(error => {
+                console.error("Error fetching news feed:", error);
+                newsContainer.innerHTML = `<p class="loading-message" style="color: red;">Error loading news feed. (${error.message})</p>`;
+            });
+    </script>
+    </body>
+</html>
