@@ -171,15 +171,15 @@
         <section class="channels-section">
             <h2>Channels to Get Started:</h2>
 
-            <a href="http://www.youtube.com/@FoundAndExplained" target="_blank" class="channel-card">
+            <a href="https://www.youtube.com/@FoundAndExplained" target="_blank" class="channel-card">
                 <img src="resources/Found and Explained.jpg" class="channel-logo" alt="Found & Explained Logo">
                 <div class="channel-name">Found & Explained</div>
             </a>
-           
+
             <a href="https://www.youtube.com/@PaperSkiesAviation" target="_blank" class="channel-card">
-        <img src="resources/PaperSkies.jpg" class="channel-logo" alt="PaperSkies Logo">
-        <div class="channel-name">PaperSkies Aviation</div>
-    </a>
+                <img src="resources/PaperSkies.jpg" class="channel-logo" alt="PaperSkies Logo">
+                <div class="channel-name">PaperSkies Aviation</div>
+            </a>
 
         </section>
 
@@ -193,7 +193,7 @@
 
     <script>
         const aviationRSS = "https://theaviationist.com/feed/";
-        const rssAPI = "https://api.rss2json.com/v1/api.json?count=12&rss_url=" + encodeURIComponent(aviationRSS);
+        const rssAPI = "https://api.rss2json.com/v1/api.json?rss_url=" + encodeURIComponent(aviationRSS);
         const container = document.getElementById("news-feed-container");
 
         const fallbackThumb = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/480px-No_image_available.svg.png";
@@ -208,7 +208,8 @@
                     return;
                 }
 
-                data.items.forEach(item => {
+                // 🔥 Show only 12 news items
+                data.items.slice(0, 12).forEach(item => {
                     const newsItem = document.createElement("a");
                     newsItem.href = item.link;
                     newsItem.target = "_blank";
