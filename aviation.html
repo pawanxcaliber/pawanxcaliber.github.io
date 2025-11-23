@@ -148,57 +148,47 @@
     </div>
 
     <script>
-        const rssFeedUrl = encodeURIComponent("https://theaviationist.com/feed/");
-        const proxyUrl = "https://api.allorigins.win/get?url="; 
-        const newsContainer = document.getElementById("news-feed-container");
+        const aviationRSS = "https://theaviationist.com/feed/";
+        const rssAPI = "https://api.rss2json.com/v1/api.json?rss_url=" + encodeURIComponent(aviationRSS);
+        const container = document.getElementById("news-feed-container");
 
-        function displayNews(xmlText) {
-            const parser = new DOMParser();
-            const xmlDoc = parser.parseFromString(xmlText, "text/xml");
-            const items = xmlDoc.querySelectorAll("item");
-
-            newsContainer.innerHTML = "";
-
-            items.forEach(item => {
-                const title = item.querySelector("title")?.textContent;
-                const link = item.querySelector("link")?.textContent;
-                const pubDate = item.querySelector("pubDate")?.textContent;
-
-                const newsItem = document.createElement("a");
-                newsItem.href = link;
-                newsItem.target = "_blank";
-                newsItem.className = "news-item";
-
-                const titleEl = document.createElement("h3");
-                titleEl.textContent = title;
-
-                const dateEl = document.createElement("p");
-                dateEl.textContent = pubDate ? new Date(pubDate).toLocaleDateString() : "Date N/A";
-
-                newsItem.appendChild(titleEl);
-                newsItem.appendChild(dateEl);
-
-                newsContainer.appendChild(newsItem);
-            });
-
-            if (items.length === 0) {
-                newsContainer.innerHTML = `<p class="loading-message">No news items found.</p>`;
-            }
-        }
-
-        // Fetch RSS feed using AllOrigins
-        fetch(proxyUrl + rssFeedUrl)
-            .then(res => {
-                if (!res.ok) throw new Error("Proxy blocked or down");
-                return res.json();
-            })
+        fetch(rssAPI)
+            .then(response => response.json())
             .then(data => {
-                displayNews(data.contents); // AllOrigins returns JSON { contents: "xml string" }
+                container.innerHTML = "";
+
+                if (!data.items || data.items.length === 0) {
+                    container.innerHTML = "<p class='loading-message'>No news items found.</p>";
+                    return;
+                }
+
+                data.items.forEach(item => {
+                    const link = item.link;
+                    const title = item.title;
+                    const date = new Date(item.pubDate).toLocaleDateString();
+
+                    const newsItem = document.createElement("a");
+                    newsItem.href = link;
+                    newsItem.target = "_blank";
+                    newsItem.className = "news-item";
+
+                    const titleEl = document.createElement("h3");
+                    titleEl.textContent = title;
+
+                    const dateEl = document.createElement("p");
+                    dateEl.textContent = date;
+
+                    newsItem.appendChild(titleEl);
+                    newsItem.appendChild(dateEl);
+
+                    container.appendChild(newsItem);
+                });
             })
             .catch(err => {
-                console.error("RSS Error:", err);
-                newsContainer.innerHTML = `<p class="loading-message" style="color:red;">Failed to load news. (${err.message})</p>`;
+                console.error(err);
+                container.innerHTML = `<p class="loading-message" style="color:red;">Error fetching feed.</p>`;
             });
     </script>
+
 </body>
 </html>
