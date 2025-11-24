@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux & Open Source - Pawan M Kolachippu</title>
+
+    <style>
+        /* Shared Styles for Monospace, High-Contrast Design */
+        body {
+            background-color: #f3f4f6;
+            color: #1f2937;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 2rem;
+            box-sizing: border-box;
+        }
+
+        .card {
+            background-color: #ffffff;
+            border: 2px solid #000;
+            padding: 2rem;
+            max-width: 90%;
+            width: 800px;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            box-shadow: 8px 8px 0px #000;
+        }
+
+        /* Header Section */
+        .header-section {
+            text-align: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 1.5rem;
+        }
+        .header-section h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 0;
+        }
+        .header-section .back-button {
+            display: inline-block;
+            margin-top: 1rem;
+            text-decoration: none;
+            color: #4b5563;
+            transition: color 0.05s ease;
+        }
+        .header-section .back-button:hover {
+            color: #000;
+        }
+
+        /* General Section Styling */
+        .section {
+            text-align: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 1.5rem;
+        }
+        .section:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        .section h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 0 1rem;
+        }
+
+        /* 2. Core Concepts / Familiar Tool Set Section Grid */
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.75rem;
+        }
+        .tool-item {
+            background-color: #f9fafb;
+            border: 2px solid #000;
+            padding: 0.75rem 0.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-align: center;
+            /* No hover state here as these are informational, not links */
+        }
+
+        /* 3. Key Resources (Like Channel Cards) */
+        .resource-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .resource-card {
+            background-color: #f9fafb;
+            border: 2px solid #000;
+            padding: 1rem;
+            text-decoration: none;
+            color: #1f2937;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: transform 0.05s ease, box-shadow 0.05s ease;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 4px 4px 0px #000;
+        }
+        
+        .resource-card .type {
+            font-size: 0.8rem;
+            font-weight: normal;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+
+        /* 4. News Feed Section */
+        .news-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+
+        .news-item {
+            background-color: #f9fafb;
+            border: 2px solid #000;
+            padding: 1rem;
+            text-decoration: none;
+            color: #1f2937;
+            display: block;
+            transition: transform 0.05s ease, box-shadow 0.05s ease;
+            text-align: left; /* Ensure text alignment is left inside card */
+        }
+        .news-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 4px 4px 0px #000;
+        }
+
+        /* Linux Magazine doesn't always provide image links in the RSS description, so use a placeholder background */
+        .news-thumb {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border: 2px solid #000;
+            margin-bottom: 0.5rem;
+            background-color: #d1d5db; /* Grey placeholder */
+            display: block; /* Ensure it takes up space */
+        }
+
+        .news-item h3 {
+            font-size: 1rem;
+            margin: 0 0 0.5rem;
+        }
+        .news-item p {
+            font-size: 0.8rem;
+            margin: 0;
+            color: #4b5563;
+        }
+
+        .loading-message {
+            grid-column: 1 / -1;
+            font-style: italic;
+            color: #4b5563;
+        }
+
+        /* Media Queries for Mobile Responsiveness */
+        @media (max-width: 600px) {
+            body { padding: 1rem; }
+            .card { padding: 1.5rem; gap: 1.5rem; }
+            .header-section h1 { font-size: 2rem; }
+            .tool-grid { grid-template-columns: repeat(2, 1fr); }
+            .news-list { grid-template-columns: 1fr; }
+            .resource-card { flex-direction: column; align-items: flex-start; }
+            .resource-card .type { align-self: flex-start; }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <header class="header-section">
+            <h1>Linux & Open Source</h1>
+            <a href="index.html" class="back-button">← Back to Home</a>
+        </header>
+        
+        <!-- 2. Core Concepts / Familiar Tool Set Section -->
+        <section class="section">
+            <h2>Familiar Tool Set:</h2>
+            <div class="tool-grid">
+                <div class="tool-item" style="grid-column: span 2;">**Distributions**</div>
+                <div class="tool-item">Debian</div>
+                <div class="tool-item">Linux Mint</div>
+                <div class="tool-item">Arch Linux</div>
+                <div class="tool-item">Arch/Manjaro</div>
+
+                <div class="tool-item" style="grid-column: span 2;">**Scripting**</div>
+                <div class="tool-item">Bash</div>
+                <div class="tool-item">Python</div>
+                
+                <div class="tool-item" style="grid-column: span 2;">**Core Utilities**</div>
+                <div class="tool-item">Cron</div>
+                <div class="tool-item">systemd</div>
+                <div class="tool-item">SSH</div>
+                <div class="tool-item">Git</div>
+                
+                <div class="tool-item" style="grid-column: span 2;">**Virtualization**</div>
+                <div class="tool-item">QEMU/KVM</div>
+                <div class="tool-item">VirtualBox</div>
+                <div class="tool-item">WSL</div>
+            </div>
+        </section>
+
+        <!-- 3. Community / Learning Resources Section -->
+        <section class="section">
+            <h2>Key Resources:</h2>
+            <div class="resource-list">
+                
+                <a href="https://linuxjourney.com/" target="_blank" class="resource-card">
+                    <div>Linux Journey <div class="type">Learning / Tutorials</div></div>
+                    <span>→</span>
+                </a>
+                
+                <a href="https://www.youtube.com/@SavvyNik" target="_blank" class="resource-card">
+                    <div>SavvyNik <div class="type">YouTube Channel</div></div>
+                    <span>→</span>
+                </a>
+                
+                <a href="https://wiki.archlinux.org/" target="_blank" class="resource-card">
+                    <div>Arch Wiki <div class="type">Premier Documentation</div></div>
+                    <span>→</span>
+                </a>
+
+                <a href="https://man7.org/linux/man/index.html" target="_blank" class="resource-card">
+                    <div>Linux Man Pages Online <div class="type">Core Documentation</div></div>
+                    <span>→</span>
+                </a>
+
+                <a href="https://www.reddit.com/r/linux" target="_blank" class="resource-card">
+                    <div>r/linux <div class="type">Community Forum</div></div>
+                    <span>→</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- 4. Dynamic News Feed Section -->
+        <section class="section">
+            <h2>Linux Magazine News Feed:</h2>
+            <div class="news-list" id="news-feed-container">
+                <p class="loading-message">Loading news headlines...</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- START: Dynamic News Feed Loading Script -->
+    <script>
+        // RSS feed URL for Linux Magazine News
+        const linuxRSS = "https://www.linux-magazine.com/index.php/rss/feed/lmi_news";
+        // Use the successful RSS-to-JSON API service
+        const rssAPI = "https://api.rss2json.com/v1/api.json?rss_url=" + encodeURIComponent(linuxRSS);
+        const container = document.getElementById("news-feed-container");
+
+        // Simple grey placeholder for thumbnails, as images are often not present/easy to extract from this feed's description
+        const fallbackThumb = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNgoBAAAEAwAXeUqQoAAAAASUVORK5CYII="; 
+
+        fetch(rssAPI)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP status ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                container.innerHTML = "";
+
+                if (!data.items || data.items.length === 0) {
+                    container.innerHTML = "<p class='loading-message'>No news items found or feed is unavailable.</p>";
+                    return;
+                }
+                
+                // Limit to the first 12 items for a clean grid layout
+                data.items.slice(0, 12).forEach(item => {
+                    const newsItem = document.createElement("a");
+                    newsItem.href = item.link;
+                    newsItem.target = "_blank";
+                    newsItem.className = "news-item";
+                    newsItem.rel = 'noopener noreferrer';
+
+                    let imgUrl = fallbackThumb;
+                    // Attempt to extract image from description (as done previously)
+                    if (item.description) {
+                        const match = item.description.match(/<img[^>]+src="([^">]+)"/i);
+                        if (match) imgUrl = match[1];
+                    }
+
+                    const img = document.createElement("img");
+                    img.className = "news-thumb";
+                    img.src = imgUrl;
+                    img.alt = `Thumbnail for ${item.title}`;
+                    img.onerror = function() {
+                        this.src = fallbackThumb; // Use fallback if image extraction fails to load
+                        this.style.backgroundColor = '#d1d5db';
+                    };
+
+
+                    const titleEl = document.createElement("h3");
+                    titleEl.textContent = item.title;
+
+                    const dateEl = document.createElement("p");
+                    dateEl.textContent = new Date(item.pubDate).toLocaleDateString();
+
+                    // Append the elements to the news item link
+                    newsItem.appendChild(img);
+                    newsItem.appendChild(titleEl);
+                    newsItem.appendChild(dateEl);
+
+                    // Append the news item to the container
+                    container.appendChild(newsItem);
+                });
+            })
+            .catch(err => {
+                console.error("Error fetching Linux Magazine feed:", err);
+                container.innerHTML = `<p class="loading-message" style="color:red;">Error fetching feed. Check console for details.</p>`;
+            });
+    </script>
+    <!-- END: Dynamic News Feed Loading Script -->
+
+</body>
+</html>
