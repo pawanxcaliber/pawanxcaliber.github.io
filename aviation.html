@@ -63,10 +63,12 @@
             font-weight: bold;
             margin-bottom: 1rem;
         }
+        
+        /* === FIX: Container for spacing the channel cards === */
         .channel-list {
             display: flex;
             flex-direction: column;
-            gap: 1.5rem; 
+            gap: 1.5rem; /* THIS CONTROLS THE VERTICAL SPACE BETWEEN CARDS */
         }
 
         /* Channel Card */
@@ -176,15 +178,20 @@
         <section class="channels-section">
             <h2>Channels to Get Started:</h2>
 
-            <a href="http://www.youtube.com/@FoundAndExplained" target="_blank" class="channel-card">
-                <img src="resources/Found and Explained.jpg" class="channel-logo" alt="Found & Explained Logo">
-                <div class="channel-name">Found & Explained</div>
-            </a>
+            <!-- NEW CONTAINER for spacing the cards -->
+            <div class="channel-list"> 
+
+                <a href="http://www.youtube.com/@FoundAndExplained" target="_blank" class="channel-card">
+                    <img src="resources/Found and Explained.jpg" class="channel-logo" alt="Found & Explained Logo">
+                    <div class="channel-name">Found & Explained</div>
+                </a>
            
-            <a href="https://www.youtube.com/@PaperSkiesAviation" target="_blank" class="channel-card">
-        <img src="resources/PaperSkies.jpg" class="channel-logo" alt="PaperSkies Logo">
-        <div class="channel-name">PaperSkies Aviation</div>
-    </a>
+                <a href="https://www.youtube.com/@PaperSkiesAviation" target="_blank" class="channel-card">
+                    <img src="resources/PaperSkies.jpg" class="channel-logo" alt="PaperSkies Logo">
+                    <div class="channel-name">PaperSkies Aviation</div>
+                </a>
+
+            </div> <!-- End NEW CONTAINER -->
 
         </section>
 
