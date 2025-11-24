@@ -76,6 +76,24 @@
             grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 0.75rem;
         }
+        
+        /* NEW: Style for the non-bordered, left-aligned skill group headers */
+        .tool-header {
+            grid-column: 1 / -1; /* Spans all columns */
+            text-align: left;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-top: 1rem;
+            margin-bottom: 0.25rem;
+            padding: 0;
+            border: none;
+            background-color: transparent;
+        }
+        .tool-header:first-child {
+            margin-top: 0;
+        }
+        
+        /* Skills (with borders) */
         .tool-item {
             background-color: #f9fafb;
             border: 2px solid #000;
@@ -83,7 +101,6 @@
             font-weight: 600;
             font-size: 0.9rem;
             text-align: center;
-            /* No hover state here as these are informational, not links */
         }
 
         /* 3. Key Resources (Like Channel Cards) */
@@ -134,23 +151,14 @@
             color: #1f2937;
             display: block;
             transition: transform 0.05s ease, box-shadow 0.05s ease;
-            text-align: left; /* Ensure text alignment is left inside card */
+            text-align: left;
         }
         .news-item:hover {
             transform: translateY(-3px);
             box-shadow: 4px 4px 0px #000;
         }
 
-        /* Linux Magazine doesn't always provide image links in the RSS description, so use a placeholder background */
-        .news-thumb {
-            width: 100%;
-            height: 120px;
-            object-fit: cover;
-            border: 2px solid #000;
-            margin-bottom: 0.5rem;
-            background-color: #d1d5db; /* Grey placeholder */
-            display: block; /* Ensure it takes up space */
-        }
+        /* REMOVED .news-thumb STYLES */
 
         .news-item h3 {
             font-size: 1rem;
@@ -191,23 +199,24 @@
         <section class="section">
             <h2>Familiar Tool Set:</h2>
             <div class="tool-grid">
-                <div class="tool-item" style="grid-column: span 2;">**Distributions**</div>
+                <!-- Restructured to use tool-header for groups without borders -->
+                <div class="tool-header">Distributions</div>
                 <div class="tool-item">Debian</div>
                 <div class="tool-item">Linux Mint</div>
                 <div class="tool-item">Arch Linux</div>
                 <div class="tool-item">Arch/Manjaro</div>
 
-                <div class="tool-item" style="grid-column: span 2;">**Scripting**</div>
+                <div class="tool-header">Scripting</div>
                 <div class="tool-item">Bash</div>
                 <div class="tool-item">Python</div>
                 
-                <div class="tool-item" style="grid-column: span 2;">**Core Utilities**</div>
+                <div class="tool-header">Core Utilities</div>
                 <div class="tool-item">Cron</div>
                 <div class="tool-item">systemd</div>
                 <div class="tool-item">SSH</div>
                 <div class="tool-item">Git</div>
                 
-                <div class="tool-item" style="grid-column: span 2;">**Virtualization**</div>
+                <div class="tool-header">Virtualization</div>
                 <div class="tool-item">QEMU/KVM</div>
                 <div class="tool-item">VirtualBox</div>
                 <div class="tool-item">WSL</div>
@@ -262,9 +271,8 @@
         // Use the successful RSS-to-JSON API service
         const rssAPI = "https://api.rss2json.com/v1/api.json?rss_url=" + encodeURIComponent(linuxRSS);
         const container = document.getElementById("news-feed-container");
-
-        // Simple grey placeholder for thumbnails, as images are often not present/easy to extract from this feed's description
-        const fallbackThumb = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNgoBAAAEAwAXeUqQoAAAAASUVORK5CYII="; 
+        
+        // Note: Image extraction/display logic is removed per user request.
 
         fetch(rssAPI)
             .then(response => {
@@ -289,31 +297,15 @@
                     newsItem.className = "news-item";
                     newsItem.rel = 'noopener noreferrer';
 
-                    let imgUrl = fallbackThumb;
-                    // Attempt to extract image from description (as done previously)
-                    if (item.description) {
-                        const match = item.description.match(/<img[^>]+src="([^">]+)"/i);
-                        if (match) imgUrl = match[1];
-                    }
-
-                    const img = document.createElement("img");
-                    img.className = "news-thumb";
-                    img.src = imgUrl;
-                    img.alt = `Thumbnail for ${item.title}`;
-                    img.onerror = function() {
-                        this.src = fallbackThumb; // Use fallback if image extraction fails to load
-                        this.style.backgroundColor = '#d1d5db';
-                    };
-
-
+                    // Title
                     const titleEl = document.createElement("h3");
                     titleEl.textContent = item.title;
 
+                    // Date
                     const dateEl = document.createElement("p");
                     dateEl.textContent = new Date(item.pubDate).toLocaleDateString();
 
-                    // Append the elements to the news item link
-                    newsItem.appendChild(img);
+                    // Append the elements to the news item link (only text)
                     newsItem.appendChild(titleEl);
                     newsItem.appendChild(dateEl);
 
